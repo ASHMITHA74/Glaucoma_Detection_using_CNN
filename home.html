@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Glaucoma Detection</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+
+            background-color: #e4e7fd;
+            color: #618fb2;
+            font-family: 'Montserrat', sans-serif;
+            background-repeat: no-repeat !important;
+            background-size: cover !important;
+            background-position: center center !important;
+        }
+
+       
+        .form-control-file {
+            color: #ffffff;
+        }
+
+        .container-fluid {
+            padding: 20px;
+        }
+
+        .btn-primary {
+            background-color: #618fb2;
+            border-color: #054350;
+            align-self: center;
+            top: 28%;
+            left: 35%;
+            bottom: 15%;
+        }
+
+        .btn-primary:hover {
+            background-color: #054350;
+            border-color: #054350;
+        }
+
+        #selectedImage {
+            max-width: 100%;
+            max-height: 100%;
+            align-self: center;
+
+        }
+
+        .image-upload {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+
+        }
+
+        .image-upload span {
+            display: block;
+            margin-top: 50px;
+        }
+
+        .image-upload.hide {
+            display: none;
+        }
+
+        .img-thumbnail {
+            width: 100%;
+            height: 100%;
+
+
+        }
+
+        .card {
+            margin: 5% 0% 5% 5%;
+            padding: 20px;
+            width: 90%;
+            height: 400px;
+            background-color: #010101;
+            box-shadow: 0px 0px 10px #618fb2;
+            border-radius: 5px;
+            overflow: hidden;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #0d0d0d;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0px 0px 200px #618fb2;
+
+            
+        }
+        .container-message {
+            position: absolute;
+            top: 40%;
+            left: 25%;
+            bottom: 15%;
+            transform: translate(-50%, -50%);
+            color: #999;
+            font-size: 1.2em;
+        }
+
+        input[type="file"]::before {
+            margin:10px;
+            content: "Click to browse image ";
+            display: inline-block;
+            background-color: #054350;
+            color: #fff;
+            padding: 20px 12px ;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="file"]::-webkit-file-upload-button {
+            display: none;
+        }
+
+        input[type="file"] {
+            color: #000000;
+            width:100%;
+
+        }
+        .heading1{
+            position: relative;
+            background-color: #010101;
+            color: #618fb2;
+            font-family: "Colonna MT", serif;
+        }
+        .h1s{
+            font-size: 100px;
+        }
+        .h2s{
+            font-size: 45px;
+        }
+        .text1{
+            color:#ffffff;
+            font-size: 40px;
+            font-weight: 300;
+            text-align: center;
+        }
+        .text2{
+            font-size: 25px;
+            color:#618fb2;
+        }
+        #openButton{
+            font-size: 25px;
+            font-weight: 300;
+            box-shadow: 0px 0px 10px #618fb2;
+            background-color: #618fb2;
+            color:#010101;
+            width: fit-content;
+            height: fit-content;
+            text-align: center;
+            padding:10px;
+            margin-top:10px;
+
+        }
+    </style>
+</head>
+<header class="jumbotron heading1 text-center mb-5" >
+    <div class="container mx-auto px-6 py-4">
+        <div class="flex  justify-between">
+            <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
+                <a href="home.html"class="mr-5 hover:text-gray-900"></a>
+                <a href="hh.html"class="mr-5 hover:text-gray-900"></a>
+                <a href="login.html"class="mr-5 hover:text-gray-900"></a>
+              </nav>
+        </div>
+      </div>
+    <h1 class="h1s">GlaucoSense</h1>
+    <p class="h2s">Empowering Early Glaucoma Detection</p>
+</header>
+<body>
+    <div class="card">
+        <div class="text1">      About our glaucoma prediction model</div>
+                <div class="text2"> Our website provides a user-friendly interface where the user can upload a retinal image and receive a prediction regarding the presence or absence of glaucoma.Our prediction model uses a pretrained convolutional neural network (CNN) to analyze images of the eye or optic nerve head and provide users with valuable information about their eye health.
+                    The model was trained on a large dataset of eye images and fine-tuned to improve accuracy and minimize false positives and false negatives. 
+                   We are committed to providing the most reliable and accurate predictions possible for our users.
+               </div>
+
+                   <button id="openButton"><b>Examine</b></button>
+   </div>     
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Input card section -->
+            <div class="col-md-6 my-3 mx-auto">
+                <div class="hidden" id="card">
+                    <div class="uploadFile">
+                        <form method="POST" action="{{ url_for('predict', _method='POST') }}" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <div class="image-upload">
+                                    <label for="fileInput">Select an image:</label><br>
+                                    <input type='file' name="file" id="fileInput" accept="image/*" title="" />
+    
+                                    <div class="col-md-6 text-center">
+                                        <img src="#" alt="Selected image" id="selectedImage" class="img-thumbnail" style="display: none; max-width: 100%;">
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">Supported formats: jpg, jpeg, png</small>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary" style="float: right;background-color: #054350;">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                    <button id="closeButton">Close</button>
+                </div>
+            </div>
+            <!-- Prediction info card section -->
+             
+        </div>
+    </div>
+    
+    
+
+    <!-- JavaScript code -->
+    <script>
+        // Add an event listener to the file input element
+        var fileInput = document.getElementById('fileInput');
+        var imageUpload = document.querySelector('.image-upload');
+        var selectedImage = document.getElementById('selectedImage');
+
+        imageUpload.addEventListener('click', function () {
+            if (!selectedImage.src) {
+                // Trigger click on file input if no image has been selected yet
+                fileInput.click();
+            }
+        });
+        const openButton = document.getElementById('openButton');
+const closeButton = document.getElementById('closeButton');
+const card = document.getElementById('card');
+
+openButton.addEventListener('click', function() {
+  card.classList.remove('hidden');
+});
+
+closeButton.addEventListener('click', function() {
+  card.classList.add('hidden');
+});
+        
+        fileInput.addEventListener('change', function (event) {
+            // Get the selected file
+            var selectedFile = event.target.files[0];
+            // Check if the file is a valid image
+            if (selectedFile.type.startsWith('image/')) {
+                // Create a URL for the selected file
+                var imageURL = URL.createObjectURL(selectedFile);
+                // Set the source of the image element to the URL
+                selectedImage.src = imageURL;
+                selectedImage.style.display = 'inline-block';
+                selectedImage.classList.remove('d-none');
+            } else {
+                alert('Please select a valid image file!');
+            }
+        });
+
+    </script>
+    
+</body>
+<div class="footer">
+    <footer class="text-gray-600 body-font">
+      <div class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
+        <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
+          <span class="ml-3 text-xl">Glaucoma Detection</span>
+        </a>
+       
+        <span class="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
+          <a class="text-gray-500">
+            <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+              <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+            </svg>
+          </a>
+          <a class="ml-3 text-gray-500">
+            <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+              <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
+            </svg>
+          </a>
+          <a class="ml-3 text-gray-500">
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
+            </svg>
+          </a>
+          <a class="ml-3 text-gray-500">
+            <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="0" class="w-5 h-5" viewBox="0 0 24 24">
+              <path stroke="none" d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path>
+              <circle cx="4" cy="4" r="2" stroke="none"></circle>
+            </svg>
+          </a>
+        </span>
+      </div>
+    </footer>
+</html>
