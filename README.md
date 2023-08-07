@@ -11,6 +11,7 @@ Glaucoma 1.ipynb This file contains Python code that detects glaucoma based on c
 
 Glaucoma 2.ipynb This file contains Python code that detects glaucoma using the CNN model.
 Here I have attached both codes along with a report and paper that we published for your reference.
-We made a website for uploading retinal images that detect glaucoma. So I have attached two html files for your preview.
+We made a website for uploading retinal images that detect glaucoma. So I have attached two html files and app.py for your preview.
 
 Here I have mentioned the link to a video that shows our project demonstration.
+https://youtu.be/ag6VD4muleE
